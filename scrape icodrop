@@ -1,0 +1,61 @@
+from selenium import webdriver
+from bs4 import BeautifulSoup
+import re
+import pandas as pd
+import time
+
+driver = webdriver.Edge("C:/Users/mngoc/OneDrive/Desktop/msedgedriver.exe")
+
+url_data = pd.read_csv('csv1.csv')
+
+list = url_data['Link'].tolist()
+print(list)
+
+def Icodrop():
+    link1, link2, link3, link4, link5, link6, link7, link8, link9, link10, link11, link12, link13 = [], [], [], [], [], [], [], [], [], [], [], [], []
+
+    for url in list:
+        driver.get(url)
+
+        time.sleep(5)
+
+
+        content = driver.page_source
+        soup = BeautifulSoup(content)
+
+
+        placeholder = ["", "", "", "", "", "", "", "", "", "", "", "", ""]
+
+        # Get project name
+
+        placeholder[0] = url
+
+        # Get project website / whitepaper + link
+
+        x = soup.find('div', class_=re.compile("ico-right-col"))
+        counter = 1
+        for z in x.find_all('a'):
+            placeholder[counter] = z['href']
+            counter += 1
+            print(placeholder)
+
+        # Connect placeholder item to link
+
+        link1.append(placeholder[0])
+        link2.append(placeholder[1])
+        link3.append(placeholder[2])
+        link4.append(placeholder[3])
+        link5.append(placeholder[4])
+        link6.append(placeholder[5])
+        link7.append(placeholder[6])
+        link8.append(placeholder[7])
+        link9.append(placeholder[8])
+        link10.append(placeholder[9])
+        link11.append(placeholder[10])
+        link12.append(placeholder[11])
+        link13.append(placeholder[12])
+
+    df = pd.DataFrame({"Project Name": link1, "Website": link2,"Whitepaper": link3,"Facebook": link4,"Twitter": link5,"TeleChat": link6,"TeleAnn": link7,"Medium": link8,"Discord": link9,"Youtube": link10})
+    df.to_csv(f'ICOanalytics.csv', index=False, encoding='utf-8')
+
+Icodrop()
