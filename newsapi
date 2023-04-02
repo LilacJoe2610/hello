@@ -1,0 +1,26 @@
+import requests
+import json
+from datetime import date
+from datetime import timedelta
+
+api_key = 'ace1dc1bc1f945ad8d451819350b8e19'
+url = 'https://newsapi.org/v2/everything?'
+query = 'bitcoin'
+today = date.today()
+yesterday = today - timedelta(days = 1)
+print(yesterday)
+
+response = requests.get(url,
+                        params={'q': query, 'from': yesterday},
+                        headers={'X-Api-Key': api_key},
+                        )
+json_object = response.json()
+
+json_formatted_str = json.dumps(json_object, indent=2)
+
+print(json_formatted_str)
+
+# export to file
+#with open('books.json', 'w', encoding='latin-1') as f:
+   #json.dump(json_formatted_str, f, indent=8, ensure_ascii=False)
+#print("Created Json File")
